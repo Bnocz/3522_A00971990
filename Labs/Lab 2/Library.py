@@ -58,17 +58,21 @@ def main():
         print("If you would like to end self-service press 0")
 
         choice = int(input("what would you like to do? "))
-        call_number = int(input("Enter the call number for the book: "))
 
-        function_dict = {
-            1: biblioteca.find_books(call_number),
-            2: biblioteca.remove_book(call_number),
-            3: biblioteca.check_out(call_number),
-            4: biblioteca.return_book(call_number),
-            5: biblioteca.display_available_books()
-        }
-
-        function_dict.get(choice)
+        if choice == 1:
+            call_number = int(input("Enter the call number for the book: "))
+            biblioteca.find_books(call_number)
+        if choice == 2:
+            call_number = int(input("Enter the call number for the book: "))
+            biblioteca.remove_book(call_number)
+        if choice == 3:
+            call_number = int(input("Enter the call number for the book: "))
+            biblioteca.check_out(call_number)
+        if choice == 4:
+            call_number = int(input("Enter the call number for the book: "))
+            biblioteca.return_book(call_number)
+        if choice == 5:
+            biblioteca.display_available_books()
 
 if __name__ == '__main__':
     main()
