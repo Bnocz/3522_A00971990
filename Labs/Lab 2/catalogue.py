@@ -2,6 +2,10 @@ import item
 
 
 class Catalogue:
+    """
+    Catalogue class contains methods to add, remove, and find
+    an item within the item_list.
+    """
     def __init__(self, item_list):
         self.item_list = item_list
 
@@ -31,7 +35,7 @@ class Catalogue:
         else:
             self.item_list.append(new_item)
 
-    def remove_book(self, call_number):
+    def remove_item(self, call_number):
         """
         Iterates through list to see if call number matches
         any call number of items in list, then removes the

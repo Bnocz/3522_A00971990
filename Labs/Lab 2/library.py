@@ -13,6 +13,10 @@ def display_available_books(item_list):
 
 
 class Library:
+    """
+    Class to simulate a library, takes care of lending
+    has methods for users to check_out, and return items
+    """
 
     def __init__(self, item_list):
         self.item_list = item_list
@@ -81,7 +85,7 @@ def main():
         if choice == 2:
             call_number = input("Enter the call number for the book: ")
             if isinstance(call_number, str):
-                catalogue_.remove_book(call_number)
+                catalogue_.remove_item(call_number)
             else:
                 return "That is an invalid call number"
         if choice == 3:
