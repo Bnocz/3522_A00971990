@@ -2,21 +2,40 @@ import item
 
 
 class Catalogue:
+    """
+    Catalogue class contains methods to add, remove, and find
+    an item within the item_list.
+    """
     def __init__(self, item_list):
         self.item_list = item_list
 
     def find_item(self, title):
+        """
+        searches through item_list and returns
+        all Items with identical title
+        :param title:
+        :return:
+        """
         for Item in self.item_list:
             if title == Item.title:
                 print(Item)
+            else:
+                print("Sorry, we couldn't find that item")
 
     def add_book(self, new_item):
+        """
+        Appends a book to the end of the list,
+        replaced by LibraryItemGenerator for
+        most uses.
+        :param new_item: new Item object
+        :return:
+        """
         if new_item in self.item_list:
             return
         else:
             self.item_list.append(new_item)
 
-    def remove_book(self, call_number):
+    def remove_item(self, call_number):
         """
         Iterates through list to see if call number matches
         any call number of items in list, then removes the

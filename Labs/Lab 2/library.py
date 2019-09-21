@@ -3,16 +3,31 @@ import catalogue
 
 
 def display_available_books(item_list):
+    """
+    prints item_list
+    :param item_list: list of Item objects
+    :return:
+    """
     for Item in item_list:
         print(Item)
 
 
 class Library:
+    """
+    Class to simulate a library, takes care of lending
+    has methods for users to check_out, and return items
+    """
 
     def __init__(self, item_list):
         self.item_list = item_list
 
     def check_out(self, call_number):
+        """
+        Searching through item list for call number and checks if num copies >= 1, if yes, reduces
+        num_copies by 1 and if not, tells user that book is unavailable
+        :param call_number: unique id for items
+        :return:
+        """
         for Item in self.item_list:
             if call_number == Item.call_number and Item.num_copies >= 1:
                 Item.num_copies -= 1
@@ -21,6 +36,11 @@ class Library:
                 print("Sorry that book is unavailable right now")
 
     def return_item(self, call_number):
+        """
+        search through item list and if found, increase num_copies by 1
+        :param call_number: unique id for item
+        :return:
+        """
         for Item in self.item_list:
             if call_number == Item.call_number:
                 Item.num_copies += 1
@@ -28,6 +48,12 @@ class Library:
 
 
 def main():
+    """
+    creates a list and fills it with Item objects. Creates a Library object, a catalogue object
+    and a LibraryItemGenerator object. While loop runs until user inputs 0, other inputs demonstrate
+    the possible functions within library and catalogue modules.
+    :return:
+    """
     item_list = [item.Book("Lord of the Rings", "1023.2323", "JRR Tolkien", 1),
                  item.Book("Game of Thrones", "1032.1212", "GRR Martin", 1),
                  item.Book("Harry Potter", "1111.2222", "JK Rowling", 1),
@@ -59,7 +85,7 @@ def main():
         if choice == 2:
             call_number = input("Enter the call number for the book: ")
             if isinstance(call_number, str):
-                catalogue_.remove_book(call_number)
+                catalogue_.remove_item(call_number)
             else:
                 return "That is an invalid call number"
         if choice == 3:
