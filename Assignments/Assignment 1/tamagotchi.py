@@ -1,6 +1,8 @@
 from datetime import datetime
-import time
+from edible import *
+import edible
 class Tamagotchi:
+
     def __init__(self, happiness, health, hunger):
         self.happiness = happiness
         self.health = health
@@ -9,20 +11,28 @@ class Tamagotchi:
     def modify_hunger(self, hunger):
         if self.hunger >= 100:
             self.hunger = 100
+        elif self.hunger < 0:
+            self.hunger = 0
         else:
             self.hunger += hunger
 
     def modify_health(self, health):
-        if self.health <= 0:
+        if self.health < 0:
             self.health = 0
         elif self.hunger >= 100 and health < 0:
             self.health += health*2
+        elif self.health > 100:
+            self.health = 100
         else:
             self.health += health
 
     def modify_happiness(self, happiness):
-        if self.happiness <= 0:
+        if self.happiness < 0:
             self.happiness = 0
+        elif self.happiness < 0:
+            self.happiness = 0
+        elif self.happiness > 100:
+            self.happiness = 100
         else:
             self.happiness += happiness
 
@@ -32,19 +42,24 @@ class Tamagotchi:
     def die(self):
         pass
 
+    def feed(self, food):
+        food = edible.Edible
+        self.hunger -= food.nutrition
+
     def update_status(self, check_time):
         new_time = datetime.now() - check_time
         iterations = new_time.seconds
         while iterations >= 1:
-            Tamagotchi.modify_hunger(self, 1)
-            Tamagotchi.modify_health(self, 1)
+            self.modify_hunger(1)
+            self.modify_health(1)
+            self.modify_happiness(1)
             iterations -= 1
 
     def __str__(self):
         return f"Hi I'm  and my hunger is {self.hunger}"
 
     def check_status(self):
-        print(Tamagotchi.speak(self))
+        print(self)
         Tamagotchi.update_check_time(self)
 
     def update_check_time(self):
@@ -71,18 +86,30 @@ class Goku(Tamagotchi):
             print("Wonder how Gohan is doing..")
 
     def __str__(self):
-        return f"Hi I'm goku, my hunger is {self.hunger}, and health is {self.health}"
+        return f"Hi I'm goku, my hunger is {self.hunger}, health is {self.health}, and happiness is {self.happiness}"
+
+    def feed(self, food):
+        nutrition = food.nutrition
+        if food is RiceBall:
+            self.modify_hunger(nutrition-10)
+        elif food is Medicine:
+            self.modify_health(nutrition*(-1))
+        else:
+            self.modify_hunger(nutrition)
 
     def check_status(self):
         super().check_status()
+
 
     def update_status(self, check_time):
         new_time = datetime.now() - check_time
         iterations = new_time.seconds
         while iterations >= 1:
-            Tamagotchi.modify_hunger(self, 15)
-            Tamagotchi.modify_health(self, -10)
+            self.modify_hunger(15)
+            self.modify_health(10)
+            self.modify_happiness(5)
             iterations -= 1
+
 
 class Gohan(Tamagotchi):
 
@@ -105,6 +132,15 @@ class Gohan(Tamagotchi):
     def __str__(self):
         return f"Hi I'm goku, my hunger is {self.hunger}, and health is {self.health}"
 
+    def feed(self, food):
+        nutrition = food.nutrition
+        if food is Pudding:
+            self.modify_hunger(nutrition-10)
+        elif food is Medicine:
+            self.modify_health(nutrition*(-1))
+        else:
+            self.modify_hunger(nutrition)
+
     def check_status(self):
         super().check_status()
 
@@ -112,8 +148,9 @@ class Gohan(Tamagotchi):
         new_time = datetime.now() - check_time
         iterations = new_time.seconds
         while iterations >= 1:
-            Tamagotchi.modify_hunger(self, 15)
-            Tamagotchi.modify_health(self, -10)
+            self.modify_hunger(5)
+            self.modify_health(10)
+            self.modify_happiness(10)
             iterations -= 1
 
 
@@ -129,14 +166,23 @@ class Krillin(Tamagotchi):
     def __str__(self):
         return f"Hi I'm Krillin and my hunger is {self.hunger}"
 
+    def feed(self, food):
+        nutrition = food.nutrition
+        if food is SesameChicken:
+            self.modify_hunger(nutrition-10)
+        elif food is Medicine:
+            self.modify_health(nutrition*(-1))
+        else:
+            self.modify_hunger(nutrition)
 
 
     def update_status(self, check_time):
         new_time = datetime.now() - check_time
         iterations = new_time.seconds
         while iterations >= 1:
-            Tamagotchi.modify_hunger(self, 5)
-            Tamagotchi.modify_health(self, 15)
+            self.modify_hunger(10)
+            self.modify_health(20)
+            self.modify_happiness(20)
             iterations -= 1
 
 
@@ -146,11 +192,15 @@ def main():
     choice = 0
     while choice != 1:
         check_time = tama.update_check_time()
-        choice = int(input("press 2 to check your tamagachis status"))
+        choice = int(input("press 2 to feed your tamagotchi"))
         if choice == 2:
+            tama.feed(RiceBall)
             tama.update_status(check_time)
             tama.check_status()
-
+        if choice == 3:
+            tama.feed(Medicine)
+            tama.update_status(check_time)
+            tama.check_status()
 
 
 
