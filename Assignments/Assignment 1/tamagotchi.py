@@ -1,8 +1,11 @@
 from datetime import datetime
 from edible import *
-import edible
-class Tamagotchi:
+from game import *
 
+
+class Tamagotchi:
+    is_dead = False
+    is_sick = False
     def __init__(self, happiness, health, hunger):
         self.happiness = happiness
         self.health = health
@@ -43,8 +46,15 @@ class Tamagotchi:
         pass
 
     def feed(self, food):
-        food = edible.Edible
         self.hunger -= food.nutrition
+
+    def play(self, game):
+        if game is Train:
+            pass
+        if game is Fight:
+            pass
+        if game is Spar:
+            pass
 
     def update_status(self, check_time):
         new_time = datetime.now() - check_time
@@ -99,15 +109,34 @@ class Goku(Tamagotchi):
 
     def check_status(self):
         super().check_status()
+        if self.health <= 0:
+            self.is_dead = True
+        if self.health <= 50:
+            print("Goku is feeling a bit sick, maybe you should give him some medicine")
+            self.is_sick = True
+        if self.is_sick and self.health > 50:
+            print("Goku feels way better after that medicine, and is no longer sick")
+            self.is_sick = False
 
+
+    def play(self, game):
+        if game is Train:
+            print("[Goku puts on his weighted clothing and takes you for a run]")
+            self.modify_happiness(30)
+        elif game is Fight:
+            print("[Another threat to earth has appeared! You, and Goku fight it]")
+            self.modify_happiness(40)
+        elif game is Spar:
+            print("[Goku spars with you!]")
+            self.modify_happiness(20)
 
     def update_status(self, check_time):
         new_time = datetime.now() - check_time
         iterations = new_time.seconds
         while iterations >= 1:
             self.modify_hunger(15)
-            self.modify_health(10)
-            self.modify_happiness(5)
+            self.modify_health(-10)
+            self.modify_happiness(-5)
             iterations -= 1
 
 
@@ -144,6 +173,21 @@ class Gohan(Tamagotchi):
     def check_status(self):
         super().check_status()
 
+    def is_sick(self):
+        if self.health <= 30:
+            return True
+
+    def play(self, game):
+        if game is Train:
+            print("[Gohan shows you how he trained with Piccolo]")
+            self.modify_happiness(30)
+        elif game is Fight:
+            print("[An epic battle has begun between Gohan, and his algebra homework. You decide to help out.]")
+            self.modify_happiness(40)
+        elif game is Spar:
+            print("[Gohan decides to get some exercise, you spar with each other.]")
+            self.modify_happiness(20)
+
     def update_status(self, check_time):
         new_time = datetime.now() - check_time
         iterations = new_time.seconds
@@ -175,6 +219,20 @@ class Krillin(Tamagotchi):
         else:
             self.modify_hunger(nutrition)
 
+    def is_sick(self):
+        if self.health <= 30:
+            return True
+
+    def play(self, game):
+        if game is Train:
+            print("[Krillin ]")
+            self.modify_happiness(30)
+        elif game is Fight:
+            print("[Another threat to earth has appeared! You, and Goku fight it]")
+            self.modify_happiness(40)
+        elif game is Spar:
+            print("[Goku spars with you!]")
+            self.modify_happiness(20)
 
     def update_status(self, check_time):
         new_time = datetime.now() - check_time
@@ -186,21 +244,28 @@ class Krillin(Tamagotchi):
             iterations -= 1
 
 
+
+
 def main():
 
     tama = Goku(100, 100, 0)
     choice = 0
+
     while choice != 1:
-        check_time = tama.update_check_time()
-        choice = int(input("press 2 to feed your tamagotchi"))
-        if choice == 2:
-            tama.feed(RiceBall)
-            tama.update_status(check_time)
-            tama.check_status()
-        if choice == 3:
-            tama.feed(Medicine)
-            tama.update_status(check_time)
-            tama.check_status()
+        print("we testin")
+        choice = int(input("fade me fam"))
+        while choice != 1 and not tama.is_dead:
+            check_time = tama.update_check_time()
+            choice = int(input("press 2 to feed your tamagotchi"))
+            if choice == 2:
+                tama.feed(Medicine)
+                tama.update_status(check_time)
+                tama.check_status()
+            elif choice == 3:
+                tama.play(Spar)
+                tama.update_status(check_time)
+                tama.check_status()
+
 
 
 
