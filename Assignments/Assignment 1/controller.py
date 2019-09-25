@@ -4,7 +4,12 @@ from game import *
 
 
 def main():
+    """
+    main method loops until user inputs 5. Assigns tama to a random
+    Tamagotchi object. Allows user to play/feed/check tamagotchi status.
+    """
     choice = 0
+    tama = Tamagotchi("Tama", 100, 100, 0)
     while choice != 5:
         print("Press 1 to hatch a Tamagotchi!")
         print("Press 5 to exit")
@@ -19,6 +24,9 @@ def main():
                 tama = Krillin("Krillin", 100, 100, 0)
             elif 60 < tama_spinner <= 100:
                 tama = Gohan("Gohan", 100, 100, 0)
+        else:
+            print("Sorry that's an invalid input")
+            choice = 5
         while choice != 5 and not tama.is_dead:
             check_time = update_check_time()
             print(f"{tama.name} is looking around curiously")
@@ -65,6 +73,10 @@ def main():
             elif choice == 3:
                 tama.check_status()
                 tama.update_status(check_time)
+            elif choice == 5:
+                print("Please play again!")
+            else:
+                print("Sorry that's an invalid input")
 
 
 if __name__ == '__main__':

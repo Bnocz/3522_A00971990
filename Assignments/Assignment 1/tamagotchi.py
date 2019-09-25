@@ -71,6 +71,11 @@ class Tamagotchi:
             pass
 
     def update_status(self, check_time):
+        """
+        calls all update methods for tamagotchi status, also
+        sets is_dead to true if health reaches 0
+        :param check_time: system time when check status was last called
+        """
         new_time = datetime.now() - check_time
         iterations = new_time.seconds
         while iterations >= 1:
@@ -90,18 +95,23 @@ class Tamagotchi:
                f"Health: {self.health}, Happiness: {self.happiness}"
 
     def check_status(self):
-        print(self)
-        update_check_time()
+        """
+        checks whether tamagotchi is dead or sick, then prints
+        the __str__ function which is a formatted display of
+        its interface
+        :return:
+        """
         if self.health <= 0:
             self.is_dead = True
             print("{self.name} has died, you will have to hatch a new tamagotchi to continue :(")
-        if self.health <= 50:
+        elif self.health <= 50:
             print(f"{self.name} is feeling a bit sick, maybe you should give him some medicine")
             self.is_sick = True
-        if self.is_sick and self.health > 50:
+        elif self.is_sick and self.health > 50:
             print(f"{self.name} feels way better after that medicine, and is no longer sick")
             self.is_sick = False
-
+        print(self)
+        update_check_time()
 
 class Goku(Tamagotchi):
 
