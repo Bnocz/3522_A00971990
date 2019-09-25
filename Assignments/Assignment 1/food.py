@@ -1,4 +1,7 @@
 class Edible:
+    """
+    Class for all food objects
+    """
     nutrition = -15
 
 

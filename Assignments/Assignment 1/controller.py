@@ -1,5 +1,5 @@
 from tamagotchi import *
-from edible import *
+from food import *
 from game import *
 
 

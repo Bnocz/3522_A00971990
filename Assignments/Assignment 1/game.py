@@ -1,4 +1,7 @@
 class Game:
+    """
+    class for all playable objects
+    """
     def __init__(self):
         pass
 

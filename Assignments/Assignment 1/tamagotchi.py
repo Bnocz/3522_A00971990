@@ -1,5 +1,5 @@
 from datetime import datetime
-from edible import *
+from food import *
 from game import *
 import random
 
@@ -34,6 +34,13 @@ class Tamagotchi:
             self.hunger += hunger
 
     def modify_health(self, health):
+        """
+        modifies health attribute, has if statements to
+        double if hunger is at 0 and to try and contain it
+        to 0 < x < 100
+        :param health:
+        :return:
+        """
         if self.health < 0:
             self.health = 0
         elif self.hunger >= 100 and health < 0:
@@ -44,6 +51,11 @@ class Tamagotchi:
             self.health += health
 
     def modify_happiness(self, happiness):
+        """
+        modifies happiness attribute, if statements to constrain it to
+        0 < x < 100
+        :param happiness: happiness attribute of tamagotchi
+        """
         if self.happiness < 0:
             self.happiness = 0
         elif self.happiness < 0:
@@ -113,9 +125,14 @@ class Tamagotchi:
         print(self)
         update_check_time()
 
+
 class Goku(Tamagotchi):
 
     def speak(self):
+        """
+        print statements that change based on different
+        tamagotchi attributes
+        """
         if self.happiness <= 50:
             print("Goku: I can't handle being still for so long")
         elif self.hunger >= 50:
@@ -128,6 +145,14 @@ class Goku(Tamagotchi):
             print("Goku: Power comes in response to a need, not a desire")
 
     def feed(self, food):
+        """
+        Feed is similar for all tamagotchi, only change is their
+        favorite food which an additional 10 points to hunger
+        reduction. Multiply by -1 because hunger counts down
+        while health counts up.
+        :param food: Edible object
+        :return:
+        """
         nutrition = food.nutrition
         print(f"{self.name} ate it so fast it was hardly there")
         if food is RiceBall:
@@ -138,6 +163,12 @@ class Goku(Tamagotchi):
             self.modify_hunger(nutrition)
 
     def play(self, game):
+        """
+        Play method is same for all tamagotchis except for the print
+        statement. Prints text and increases happiness attribute
+        :param game: a Game object
+        :return:
+        """
         if game is Train:
             print("[Goku puts on his weighted clothing and takes you for a run]")
             self.modify_happiness(30)
@@ -149,6 +180,12 @@ class Goku(Tamagotchi):
             self.modify_happiness(20)
 
     def update_status(self, check_time):
+        """
+        calls all update methods for tamagotchi status, also
+        sets is_dead to true if health reaches 0, it is the same for all
+        tamagotchis except for the values of modification.
+        :param check_time: system time when check status was last called
+        """
         new_time = datetime.now() - check_time
         iterations = new_time.seconds
         while iterations >= 1:
@@ -214,8 +251,8 @@ class Gohan(Tamagotchi):
         new_time = datetime.now() - check_time
         iterations = new_time.seconds
         while iterations >= 1:
-            self.modify_hunger(5)
-            self.modify_health(-5)
+            self.modify_hunger(10)
+            self.modify_health(-10)
             self.modify_happiness(-10)
             if self.health <= 0:
                 print(f"{self.name} has died, you will have to hatch a new tamagotchi to continue :(")
@@ -239,7 +276,7 @@ class Gohan(Tamagotchi):
 class Yamcha(Tamagotchi):
 
     def speak(self):
-        if self.happiness<= 50:
+        if self.happiness <= 50:
             print("Krillin: Hey, you wanna go do something?")
         elif self.hunger >= 50:
             print("Krillin: I'm really starting to get hungry!")
@@ -285,17 +322,21 @@ class Yamcha(Tamagotchi):
             iterations -= 1
 
     def check_status(self):
-        def check_status(self):
-            print("Yamcha: Let go!")
-            print("Piccolo: It's over")
-            print("*Loud explosion*")
-            self.is_dead = True
+        """
+        Yamcha is a unique tamagotchi. He can be played with as normal
+        but as soon as you check his status he will always die.
+        :return:
+        """
+        print("Yamcha: Let go!")
+        print("Piccolo: It's over")
+        print("*Loud explosion*")
+        self.is_dead = True
 
 
 class Krillin(Tamagotchi):
 
     def speak(self):
-        if self.happiness<= 50:
+        if self.happiness <= 50:
             print("Krillin: Hey, you wanna go do something?")
         elif self.hunger >= 50:
             print("Krillin: I'm really starting to get hungry!")
@@ -354,71 +395,3 @@ class Krillin(Tamagotchi):
         if self.is_sick and self.health > 30:
             print(f"{self.name} feels way better after that medicine, and is no longer sick")
             self.is_sick = False
-
-
-"""def main():
-    choice = 0
-    while choice != 5:
-        print("Press 1 to hatch a Tamagotchi!")
-        print("Press 5 to exit")
-        choice = int(input(">"))
-        if choice == 1:
-            tama_spinner = random.random()*100
-            if 0 <= tama_spinner <= 25:
-                tama = Goku("Goku", 100, 100, 0)
-            elif 25 < tama_spinner <= 30:
-                tama = Yamcha("Yamcha", 100, 100, 0)
-            elif 30 < tama_spinner <= 60:
-                tama = Krillin("Krillin", 100, 100, 0)
-            elif 60 < tama_spinner <= 100:
-                tama = Gohan("Gohan", 100, 100, 0)
-        while choice != 5 and not tama.is_dead:
-            check_time = update_check_time()
-            print(f"{tama.name} is looking around curiously")
-            print(f"1. play with {tama.name}")
-            print(f"2. feed or give {tama.name} Medicine")
-            print(f"3. to check {tama.name}'s status")
-            print(f"5. Quit")
-            choice = int(input(">"))
-            if choice == 1:
-                activity_choice = 0
-                print(f"1. Fight evil with {tama.name}")
-                print(f"2. Train with {tama.name}")
-                print(f"3. Spar with {tama.name}")
-                activity_choice = int(input(">"))
-                if activity_choice == 1:
-                    tama.play(Fight)
-                    activity_choice = 0
-                elif activity_choice == 2:
-                    tama.play(Train)
-                    activity_choice = 0
-                elif activity_choice == 3:
-                    tama.play(Spar)
-                    activity_choice = 0
-
-            elif choice == 2:
-                print(f"1. Feed {tama.name} a rice ball")
-                print(f"2. Feed {tama.name} pudding")
-                print(f"3. Feed {tama.name} sushi")
-                print(f"4. Give {tama.name} medicine")
-                activity_choice = int(input(">"))
-                if activity_choice == 1:
-                    tama.feed(RiceBall)
-                    activity_choice = 0
-                elif activity_choice == 2:
-                    tama.feed(Pudding)
-                    activity_choice = 0
-                elif activity_choice == 3:
-                    tama.feed(Sushi)
-                    activity_choice = 0
-                elif activity_choice == 4:
-                    tama.feed(Medicine)
-                    activity_choice = 0
-
-            elif choice == 3:
-                tama.check_status()
-                tama.update_status(check_time)
-
-
-if __name__ == '__main__':
-    main()"""
