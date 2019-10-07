@@ -1,6 +1,7 @@
 from enum import Enum
 import json
 
+
 class FileExtensions(Enum):
     TXT = 1
     JSON = 2
