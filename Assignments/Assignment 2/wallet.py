@@ -10,6 +10,18 @@ class Wallet:
         print("Successfully added: ")
         new_card.display_data()
 
+    def _retrieve_card_by_name(self, name):
+        requested_card = None
+        requested_card = next(name for card in self.card_list if card['Name'] == name)
+        return requested_card
+
+    def remove_card(self, name):
+        requested_card = self._retrieve_card_by_name(name)
+        self.card_list.remove(requested_card)
+        print("Card removed: ")
+        for card in self.card_list:
+            print(card)
+
 
 def generateTestCards():
     test_wallet = [
@@ -21,7 +33,7 @@ def generateTestCards():
 def main():
     test_cards = generateTestCards()
     test_wallet = Wallet(test_cards)
-    test_wallet.add_card()
+    test_wallet.remove_card("Apple")
 
 
 if __name__ == '__main__':
