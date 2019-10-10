@@ -1,22 +1,48 @@
+import random
 class Bidder:
 
-    def __init__(self, name, budget, bid_probability, bid_increase_perc, highest_bid)
+    def __init__(self, name, budget, bid_probability,
+                 bid_increase_perc, highest_bid):
         self.name = name
         self.budget = budget
         self.bid_probability = bid_probability
-        self.highest_bid = highest_bid
+        self.highest_bid = 0
         self.bid_increase_perc = bid_increase_perc
 
+
+    def bid(self, auctioneer):
+        bid = auctioneer.highest_current_bid * self.bid_increase_perc
+        if bid < self.budget:
+            return bid
+        elif bid >= self.budget:
+            return self.budget
+
     def __call__(self, auctioneer):
-        print(f"Hi, I'm a bidder, my name is {self.name}")
+        bid_chance = random.random()
+        if bid_chance < self.bid_probability:
+            auctioneer.check_bid(self.name)
+        else:
+            pass
 
 
 class Auctioneer:
 
-    def __init__(self)
+    def __init__(self):
         self.highest_current_bid = None
         self.highest_current_bidder = None
-        bidder_list = []
+        self.bidder_list = []
+
+    def check_bid(self, name):
+        if name is not self.highest_current_bidder:
+
+
+
+    def attach_bidder(self, callback):
+        self.bidder_list.append(callback)
+
+    def execute_callbacks(self):
+        for bidder in self.bidder_list:
+            bidder(self)
 
 
 class Auction:
