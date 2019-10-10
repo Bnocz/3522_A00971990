@@ -12,7 +12,7 @@ class Bidder:
 
     def bid(self, auctioneer):
         bid = auctioneer.highest_current_bid * self.bid_increase_perc
-        if bid < self.budget:
+        if bid <= self.budget:
             return bid
         elif bid >= self.budget:
             return self.budget
@@ -34,8 +34,16 @@ class Auctioneer:
 
     def check_bid(self, name):
         if name is not self.highest_current_bidder:
-
-
+            bid = name.bid
+            if bid > self.highest_current_bid:
+                self.highest_current_bid = bid
+                self.highest_current_bidder = name
+                self.execute_callbacks()
+                return True
+            else:
+                return False
+        else:
+            return False
 
     def attach_bidder(self, callback):
         self.bidder_list.append(callback)
