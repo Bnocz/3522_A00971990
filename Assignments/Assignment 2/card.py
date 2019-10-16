@@ -208,13 +208,19 @@ class OtherCard(Card):
 
 
 class CardGenerator:
-    @staticmethod
-    def generate_card(**kwargs):
-        for key, value in kwargs.items():
-            card = IdCard(key, value)
+    '''
+    Class that has methods which take user input to generate cards
+    '''
 
     @staticmethod
     def generate_id_card(card_type, name, issuer):
+        '''
+        generates an id card object based on user input.
+        :param card_type: parameter taken from generate_card to determine which card to create
+        :param name: nickname user gave the card. Sort of an ID for the card
+        :param issuer: The bank or person who gave the card, collected in generate_card
+        :return DebitCard, CreditCard, PersonalIdentificationCard
+        '''
         user_input = None;
         company = issuer
         user_input = input("Enter the name on the card: ")
@@ -240,6 +246,13 @@ class CardGenerator:
 
     @staticmethod
     def generate_other_card(card_type, name, issuer):
+        '''
+        generates non-id cards, as well as "other" cards
+        :param card_type: parameter taken from generate_card to determine which card to create
+        :param name: nickname user gave the card. Sort of an ID for the card
+        :param issuer: The bank or person who gave the card, collected in generate_card
+        :return LoyaltyCard, BusinessCard or OtherCard
+        '''
         user_input = None;
         company = issuer
         user_input = input("Enter the card number (leave blank if the card has no number): ")
@@ -252,17 +265,22 @@ class CardGenerator:
         elif card_type == "business":
             card_type = "Business Card"
             generated_card = BusinessCard(name=name, bank=company, number=card_number,
-                                         optional=optional)
+                                          optional=optional)
         else:
             user_input = input("Enter the card type: ")
             card_type = user_input
             generated_card = OtherCard(name=name, bank=company, number=card_number,
-                                         optional=optional, card_type=card_type)
+                                       optional=optional, card_type=card_type)
 
         return generated_card
 
     @staticmethod
-    def generateCard():
+    def generate_card():
+        '''
+        gathers common data between cards, nickname the user has given the card,
+        the issuer of the card, as well as the type of card it is, then passes this information
+        onto the specialized generator methods
+        '''
         user_input = None
         new_card = None
         print("Please enter a nickname for your card: ")
@@ -273,7 +291,7 @@ class CardGenerator:
         issuer = user_input
         while True:
             try:
-                print(f"What kind of card is {name}? (Credit, Debit, Loyalty, Business, Other")
+                print(f"What kind of card is {name}? (Credit, Debit, Loyalty, Business, ID, other)")
                 user_input = input(">")
                 user_input = user_input.casefold()
                 if user_input == "credit" or user_input == "debit"or user_input == 'id':
@@ -288,8 +306,4 @@ class CardGenerator:
             except ValueError:
                 print("Sorry, that's an invalid input")
 
-    @staticmethod
-    def add_cards():
-        new_card = CardGenerator.generateCard()
-        new_card.app
 
