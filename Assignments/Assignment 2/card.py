@@ -3,6 +3,9 @@ import unicodedata
 
 
 class Card(abc.ABC):
+    '''
+    abstract class for a basic card with no data
+    '''
     default_payment_data = {
         'name': None,
         'card_face_name': "",
@@ -13,20 +16,33 @@ class Card(abc.ABC):
     }
 
     def __init__(self, **kwargs):
+        '''
+        takes input and sets attributes based on input
+        :param kwargs: key word arguments entered by user
+        '''
         self.card_data = Card.default_payment_data
         for key, item in kwargs.items():
             setattr(self, key, item)
 
     def __getitem__(self, key):
+        '''
+        Grabs attribute by key from object
+        :param key: key for attribute
+        :return:
+        '''
         return self.card_data[key]
 
     def display_data(self, **kwargs):
+        '''
+        displays the card data, has optional arguments
+        to only display if entered by user
+        :param kwargs: key word arguments entered by user
+        '''
         if self.optional != "":
             print(f"Name: {self.name}")
             print(f"Issuer: {self.bank}")
             if self.number != "":
                 print(f"Number: {self.number}")
-            print(f"Card Type: {self['card_type']}")
             print(f"Notes: {self.optional}\n")
         else:
             print(f"Name: {self.name}")
@@ -35,11 +51,18 @@ class Card(abc.ABC):
                 print(f"Number: {self.number}")
 
     def __str__(self):
+        '''
+        made redundant by display_data method. Used during testing
+        '''
         return f"Nickname: {self['Name']}, Bank: {self['Bank']}, " \
-        f"CardNum: {self['CardNum']}, Expires on: {self['Expires']}"
+                f"CardNum: {self['CardNum']}, Expires on: {self['Expires']}"
+
 
 class IdCard(Card):
-
+    '''
+    parent class of all cards that have personal
+    data, credit/debit/personalID/etc.
+    '''
     def __int__(self, **kwargs):
         super().__init__()
 
@@ -53,7 +76,6 @@ class IdCard(Card):
             print(f"Issuer: {self.bank}")
             print(f"Card Number: {self.number}")
             print(f"Expires on: {self.expires}")
-            print(f"Card Type: {self['card_type']}")
             print(f"Notes: {self.optional}\n")
         else:
             print(f"Card Name: {self.name}")
@@ -67,6 +89,7 @@ class IdCard(Card):
 
 
 class CreditCard(IdCard):
+
     def __int__(self, **kwargs):
         super().__init__()
 
@@ -81,6 +104,7 @@ class CreditCard(IdCard):
 
 
 class DebitCard(IdCard):
+
     def __int__(self, **kwargs):
         super().__init__()
 
@@ -92,8 +116,10 @@ class DebitCard(IdCard):
 
     def __str__(self):
         return f"{self['Name']}"
+
 
 class LoyaltyCard(Card):
+
     def __int__(self, **kwargs):
         super().__init__()
 
@@ -103,9 +129,9 @@ class LoyaltyCard(Card):
     def display_data(self, **kwargs):
         super().display_data()
 
-
     def __str__(self):
         return f"{self['Name']}"
+
 
 class BusinessCard(Card):
     def __int__(self, **kwargs):
@@ -121,7 +147,6 @@ class BusinessCard(Card):
             print(f"Issuer name: {self.bank}")
             if self.number != "":
                 print(f"Number: {self.number}")
-            print(f"Card Type: {self['card_type']}")
             print(f"Notes: {self.optional}\n")
         else:
             print(f"Name: {self.name}")
@@ -131,7 +156,6 @@ class BusinessCard(Card):
 
     def __str__(self):
         return f"{self['Name']}"
-
 
 
 class PersonalIdentificationCard(IdCard):
@@ -150,6 +174,10 @@ class PersonalIdentificationCard(IdCard):
 
 
 class OtherCard(Card):
+    '''
+    template for less popular cards, or just really
+    strange cards that wouldn't fit in the other categories.
+    '''
     def __int__(self, **kwargs):
         super().__init__()
 
@@ -157,7 +185,23 @@ class OtherCard(Card):
         super().__getitem__()
 
     def display_data(self, **kwargs):
-        super().display_data()
+        if self.optional != "":
+            print(f"Card Name: {self.name}")
+            print(f"Name on Card: {self.card_face_name}")
+            print(f"Issuer: {self.bank}")
+            if self.number != "":
+                print(f"Number: {self.number}")
+            print(f"Expires on: {self.expires}")
+            print(f"Notes: {self.optional}\n")
+            print(f"Card Type: {self.card_type}")
+        else:
+            print(f"Card Name: {self.name}")
+            print(f"Name on Card: {self.card_face_name}")
+            print(f"Issuer: {self.bank}")
+            if self.number != "":
+                print(f"Number: {self.number}")
+            print(f"Expires on: {self.expires}\n")
+            print(f"Card Type: {self.card_type}")
 
     def __str__(self):
         return f"{self['Name']}"
@@ -175,7 +219,7 @@ class CardGenerator:
         company = issuer
         user_input = input("Enter the name on the card: ")
         card_face_name = user_input
-        user_input = input("Enter the card number: ")
+        user_input = input("Enter the card number: (leave blank if card has no number)")
         card_number = user_input
         user_input = input("Enter the expiry date(MM/DD): ")
         expiry_date = user_input
