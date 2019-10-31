@@ -13,7 +13,6 @@ class BookAnalyzer:
     only once.
     """
 
-    # a constant to help filter out common punctuation.
     COMMON_PUNCTUATION = [",", "*", ";", ".", ":","(", "[", "]", ")"]
 
     def __init__(self):

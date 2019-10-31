@@ -1,4 +1,6 @@
 import cProfile, io, pstats
+import string
+
 """
 This module is responsible for holding a badly written (but not so bad
 that you won't find this in the workplace) BookAnalyzer class that needs
@@ -41,12 +43,9 @@ class BookAnalyzer:
 
         # remove common punctuation from words
         temp_text = []
-        for word in self.text:
-            temp_word = word
-            for punctuation in self.COMMON_PUNCTUATION:
-                temp_word = temp_word.replace(punctuation, '')
-            temp_text.append(temp_word.lower())
-        self.text = temp_text
+        self.text = ["".join( j for j in i if j not in
+                              string.punctuation).lower()
+                     for i in self.text]
 
 
     '''@staticmethod
@@ -71,16 +70,13 @@ class BookAnalyzer:
         :return: a list of all the unique words.
         """
         temp_text = self.text
-        unique_words = []
-        non_unique_words = []
+        unique_words = {}
         while temp_text:
             word = temp_text.pop()
-            if word in non_unique_words:
+            if word in unique_words:
                 continue
-            if word not in temp_text:
-                unique_words.append(word)
             else:
-                non_unique_words.append(word)
+                unique_words[word] = 1
         return unique_words
 
 
