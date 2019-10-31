@@ -1,7 +1,10 @@
 from abc import ABC
-from tabulate import tabulate
-class AbstractPizza(ABC):
 
+
+class AbstractPizza(ABC):
+    """
+    Abstract pizza class to define methods all pizzas should have.
+    """
     def get_crust(self):
         pass
 
@@ -16,7 +19,10 @@ class AbstractPizza(ABC):
 
 
 class ConcretePizza(AbstractPizza):
-
+    """
+    concrete base class that defines base case
+    as well as constants
+    """
     def get_crust(self):
         return "Python Pizza Signature Crust"
 
@@ -30,8 +36,10 @@ class ConcretePizza(AbstractPizza):
         return 4.99
 
 
-class Abstract_Pizza_Decorator(AbstractPizza):
+class AbstractPizzaDecorator(AbstractPizza):
+    """
 
+    """
     def __init__(self, decorated_pizza):
         self.decorated_pizza = decorated_pizza
 
@@ -48,9 +56,9 @@ class Abstract_Pizza_Decorator(AbstractPizza):
         return self.decorated_pizza.get_toppings()
 
 
-class Mozarella(Abstract_Pizza_Decorator):
+class Mozarella(AbstractPizzaDecorator):
     def __init__(self, decorated_pizza):
-        Abstract_Pizza_Decorator.__init__(self, decorated_pizza)
+        AbstractPizzaDecorator.__init__(self, decorated_pizza)
 
     def get_price(self):
         return self.decorated_pizza.get_price() + 4.99
@@ -59,9 +67,9 @@ class Mozarella(Abstract_Pizza_Decorator):
         return self.decorated_pizza.get_cheese() + 'Mozarella, '
 
 
-class ParmigianoReggiano(Abstract_Pizza_Decorator):
+class ParmigianoReggiano(AbstractPizzaDecorator):
     def __init__(self, decorated_pizza):
-        Abstract_Pizza_Decorator.__init__(self, decorated_pizza)
+        AbstractPizzaDecorator.__init__(self, decorated_pizza)
 
     def get_price(self):
         return self.decorated_pizza.get_price() + 4.99
@@ -70,9 +78,9 @@ class ParmigianoReggiano(Abstract_Pizza_Decorator):
         return self.decorated_pizza.get_cheese() + 'Parmigiano Reggiano, '
 
 
-class VeganCheese(Abstract_Pizza_Decorator):
+class VeganCheese(AbstractPizzaDecorator):
     def __init__(self, decorated_pizza):
-        Abstract_Pizza_Decorator.__init__(self, decorated_pizza)
+        AbstractPizzaDecorator.__init__(self, decorated_pizza)
 
     def get_price(self):
         return self.decorated_pizza.get_price() + 4.99
@@ -81,10 +89,9 @@ class VeganCheese(Abstract_Pizza_Decorator):
         return self.decorated_pizza.get_cheese() + 'Vegan Cheese, '
 
 
-
-class Pepperoni(Abstract_Pizza_Decorator):
+class Pepperoni(AbstractPizzaDecorator):
     def __init__(self, decorated_pizza):
-        Abstract_Pizza_Decorator.__init__(self, decorated_pizza)
+        AbstractPizzaDecorator.__init__(self, decorated_pizza)
 
     def get_price(self):
         return self.decorated_pizza.get_price() + 3
@@ -93,9 +100,9 @@ class Pepperoni(Abstract_Pizza_Decorator):
         return self.decorated_pizza.get_toppings() + 'Pepperoni, '
 
 
-class Pineapple(Abstract_Pizza_Decorator):
+class Pineapple(AbstractPizzaDecorator):
     def __init__(self, decorated_pizza):
-        Abstract_Pizza_Decorator.__init__(self, decorated_pizza)
+        AbstractPizzaDecorator.__init__(self, decorated_pizza)
 
     def get_price(self):
         return self.decorated_pizza.get_price() + 2
@@ -104,9 +111,9 @@ class Pineapple(Abstract_Pizza_Decorator):
         return self.decorated_pizza.get_toppings() + 'Pineapple, '
 
 
-class Peppers(Abstract_Pizza_Decorator):
+class Peppers(AbstractPizzaDecorator):
     def __init__(self, decorated_pizza):
-        Abstract_Pizza_Decorator.__init__(self, decorated_pizza)
+        AbstractPizzaDecorator.__init__(self, decorated_pizza)
 
     def get_price(self):
         return self.decorated_pizza.get_price() + 1.5
@@ -115,9 +122,9 @@ class Peppers(Abstract_Pizza_Decorator):
         return self.decorated_pizza.get_toppings() + 'Peppers, '
 
 
-class Mushrooms(Abstract_Pizza_Decorator):
+class Mushrooms(AbstractPizzaDecorator):
     def __init__(self, decorated_pizza):
-        Abstract_Pizza_Decorator.__init__(self, decorated_pizza)
+        AbstractPizzaDecorator.__init__(self, decorated_pizza)
 
     def get_price(self):
         return self.decorated_pizza.get_price() + 1.5
@@ -126,9 +133,9 @@ class Mushrooms(Abstract_Pizza_Decorator):
         return self.decorated_pizza.get_toppings() + 'Mushrooms, '
 
 
-class FreshBasil(Abstract_Pizza_Decorator):
+class FreshBasil(AbstractPizzaDecorator):
     def __init__(self, decorated_pizza):
-        Abstract_Pizza_Decorator.__init__(self, decorated_pizza)
+        AbstractPizzaDecorator.__init__(self, decorated_pizza)
 
     def get_price(self):
         return self.decorated_pizza.get_price() + 2
@@ -137,9 +144,9 @@ class FreshBasil(Abstract_Pizza_Decorator):
         return self.decorated_pizza.get_toppings() + 'Fresh Basil, '
 
 
-class Spinach(Abstract_Pizza_Decorator):
+class Spinach(AbstractPizzaDecorator):
     def __init__(self, decorated_pizza):
-        Abstract_Pizza_Decorator.__init__(self, decorated_pizza)
+        AbstractPizzaDecorator.__init__(self, decorated_pizza)
 
     def get_price(self):
         return self.decorated_pizza.get_price() + 1
@@ -148,13 +155,12 @@ class Spinach(Abstract_Pizza_Decorator):
         return self.decorated_pizza.get_toppings() + 'Spinach, '
 
 
-class BeyondMeat(Abstract_Pizza_Decorator):
+class BeyondMeat(AbstractPizzaDecorator):
     def __init__(self, decorated_pizza):
-        Abstract_Pizza_Decorator.__init__(self, decorated_pizza)
+        AbstractPizzaDecorator.__init__(self, decorated_pizza)
 
     def get_price(self):
         return self.decorated_pizza.get_price() + 1.5
 
     def get_toppings(self):
         return self.decorated_pizza.get_toppings() + 'Beyond Meat, '
-
