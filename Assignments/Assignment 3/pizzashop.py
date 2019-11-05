@@ -21,7 +21,9 @@ class AbstractPizza(ABC):
 class ConcretePizza(AbstractPizza):
     """
     concrete base class that defines base case
-    as well as constants
+    as well as the constant crust of a pizza.
+    Has methods to get crust, cheese, toppings,
+    and price.
     """
     def get_crust(self):
         return "Python Pizza Signature Crust"
@@ -38,9 +40,10 @@ class ConcretePizza(AbstractPizza):
 
 class AbstractPizzaDecorator(AbstractPizza):
     """
-
+    the interface to decorate a pizza. innit method
+    takes a ConcretePizza parameter
     """
-    def __init__(self, decorated_pizza):
+    def __init__(self, decorated_pizza: ConcretePizza):
         self.decorated_pizza = decorated_pizza
 
     def get_crust(self):
@@ -57,6 +60,10 @@ class AbstractPizzaDecorator(AbstractPizza):
 
 
 class Mozarella(AbstractPizzaDecorator):
+    """
+    Implementation of abstract decorator interface
+    """
+
     def __init__(self, decorated_pizza):
         AbstractPizzaDecorator.__init__(self, decorated_pizza)
 
