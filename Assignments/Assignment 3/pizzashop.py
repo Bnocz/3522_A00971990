@@ -59,7 +59,7 @@ class AbstractPizzaDecorator(AbstractPizza):
         return self.decorated_pizza.get_toppings()
 
 
-class Mozarella(AbstractPizzaDecorator):
+class Mozzarella(AbstractPizzaDecorator):
     """
     Implementation of abstract decorator interface
     """
@@ -71,7 +71,7 @@ class Mozarella(AbstractPizzaDecorator):
         return self.decorated_pizza.get_price() + 4.99
 
     def get_cheese(self):
-        return self.decorated_pizza.get_cheese() + 'Mozarella, '
+        return self.decorated_pizza.get_cheese() + 'Mozzarella, '
 
 
 class ParmigianoReggiano(AbstractPizzaDecorator):

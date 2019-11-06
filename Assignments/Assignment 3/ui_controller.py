@@ -2,6 +2,8 @@ from pizzashop import *
 from custom_errors import *
 import sys
 import time
+
+
 def main():
     """
     main method that drives the program.
@@ -24,7 +26,7 @@ def main():
                     *------------------------*
                     *         Cheeses:       *
                     *------------------------*
-                    *         Mozarella      *
+                    *         Mozzarella      *
                     *   Parmigiano Reggiano  *
                     *       Vegan Cheese     *
                     *------------------------*
@@ -41,7 +43,8 @@ def main():
                     **************************
                     -All Pizza's come with our Python Pizza Signature Crust
                                 """)
-            print("Enter the ingredient you would like to add, or type 'check out' to see your total. Type 'Bye' to exit")
+            print("Enter the ingredient you would like to add, or type 'check out' to "
+                  "see your total. Type 'Bye' to exit")
             user_input = input(">")
             user_input = user_input.casefold().replace(" ", "")
             if user_input == "checkout":
@@ -51,7 +54,7 @@ def main():
                 user_pizza = Pepperoni(user_pizza)
             elif user_input == "mozzarella":
                 print("topping added!")
-                user_pizza = Mozarella(user_pizza)
+                user_pizza = Mozzarella(user_pizza)
             elif user_input == "parmigianoreggiano":
                 print("topping added!")
                 user_pizza = ParmigianoReggiano(user_pizza)
@@ -76,7 +79,8 @@ def main():
             elif user_input == "beyondmeat":
                 print("topping added!")
                 user_pizza = Spinach(user_pizza)
-
+            elif user_input == "":
+                raise InputError
 
         except InputError:
             print("Invalid Input")
@@ -101,17 +105,20 @@ def check_out(user_pizza):
                   f"Cheese: {user_pizza.get_cheese()}\n"
                   f"Toppings:{user_pizza.get_toppings()}\n"
                   f"Total Price: {user_pizza.get_price()}")
-            print("Enter 'menu' to return to the menu or 'pay' to finish your order")
-            user_input = input(">")
-            if user_input == 'menu':
-                return
-            elif user_input == 'pay':
-                print("thanks for calling Python Pizza, have a nice day.")
-                time.sleep(0.5)
-                sys.exit()
+            while True:
+                print("Enter 'menu' to return to the menu or 'pay' to finish your order")
+                user_input = input(">")
+                if user_input == 'menu':
+                    return
+                elif user_input == 'pay':
+                    print("thanks for calling Python Pizza, have a nice day.")
+                    time.sleep(0.5)
+                    sys.exit()
     except NotEnoughToppings:
         print("Sorry, your pizza must have cheese.\n")
         input("Press enter to return to the menu")
         return
+
+
 if __name__ == '__main__':
     main()
