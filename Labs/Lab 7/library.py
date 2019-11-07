@@ -2,14 +2,6 @@ import item
 import catalogue
 
 
-def display_available_books(item_list):
-    """
-    prints item_list
-    :param item_list: list of Item objects
-    :return:
-    """
-    for Item in item_list:
-        print(Item)
 
 
 class Library:
@@ -17,6 +9,14 @@ class Library:
     Class to simulate a library, takes care of lending
     has methods for users to check_out, and return items
     """
+
+    def display_available_books(self):
+        """
+        prints item_list
+        :param item_list: list of Item objects
+        :return:
+        """
+        [print(item_) for item_ in self.item_list]
 
     def __init__(self, item_list):
         self.item_list = item_list
@@ -28,11 +28,12 @@ class Library:
         :param call_number: unique id for items
         :return:
         """
+        item_copy_cata = catalogue.Catalogue(self.item_list)
         for Item in self.item_list:
             if call_number == Item.call_number and Item.num_copies >= 1:
-                Item.num_copies -= 1
+                item_copy_cata.decrement_copy(Item)
                 print(f"{Item.title} has been checked out, there are {Item.num_copies} left")
-            elif call_number == Item.call_number and Item.num_copies == 0:
+            elif call_number == Item.call_number and Item.num_copies <= 0:
                 print("Sorry that book is unavailable right now")
 
     def return_item(self, call_number):
@@ -41,10 +42,12 @@ class Library:
         :param call_number: unique id for item
         :return:
         """
+        item_copy_cata = catalogue.Catalogue(self.item_list)
         for Item in self.item_list:
             if call_number == Item.call_number:
-                Item.num_copies += 1
-                print(f"thanks for returning your book, there are now {Item.num_copies} left!")
+                item_copy_cata.increment_copy(Item)
+                print(f"thanks for returning your book, "
+                      f"there are now {Item.num_copies} left!")
 
 
 def main():
@@ -54,17 +57,20 @@ def main():
     the possible functions within library and catalogue modules.
     :return:
     """
-    item_list = []
-    test_factory = item.JournalFactory()
-    item_list.append(test_factory.create_item())
-    biblioteca = Library(item_list)
-    display_available_books(item_list)
+    item_list = [item.Book(title='got', author="grrm", num_copies=2,
+                           call_number="12323"),
+                 item.DVD(title='Shrek', release_date='2001',
+                          region_code='ntsc', num_copies=0,
+                          call_number="23123")]
 
-    '''catalogue_ = catalogue.Catalogue(item_list)
-    generator_ = catalogue.LibraryItemGenerator(item_list)
+    biblioteca = Library(item_list)
+    catalogue_ = catalogue.Catalogue(item_list)
+    book_factory = item.BookFactory()
+    dvd_factory = item.DvdFactory()
+    journal_factory = item.JournalFactory()
     choice = 1
     while choice != 0:
-        print("Welcome to Biblioteca self-service")
+        print("\nWelcome to Biblioteca self-service")
         print("If you would like to find a book, press 1")
         print("If you would like to request an item be removed press 2")
         print("If you would like to check out an item press 3")
@@ -73,7 +79,7 @@ def main():
         print("If you would like to browse the full catalogue press 6")
         print("If you would like to end self-service press 0")
 
-        choice = int(input("what would you like to do? "))
+        choice = int(input("what would you like to do? \n"))
 
         if choice == 1:
             title = input("Enter the title of the book you are looking for: ")
@@ -81,6 +87,7 @@ def main():
                 catalogue_.find_item(title)
             else:
                 return "Sorry, that is an invalid title"
+                input()
         if choice == 2:
             call_number = input("Enter the call number for the book: ")
             if isinstance(call_number, str):
@@ -101,9 +108,22 @@ def main():
             else:
                 return "that is an invalid call number"
         if choice == 5:
-            generator_.generate_item(item_list)
+            print(f"what kind of item would you like to make?\n ")
+            print(f"1. Book")
+            print(f"2. DVD")
+            print(f"3. Journal")
+            choice = int(input(">"))
+            if choice == 1:
+                new_item = book_factory.create_item()
+                catalogue_.add_item(new_item)
+            if choice == 2:
+                new_item = dvd_factory.create_item()
+                catalogue_.add_item(new_item)
+            if choice == 3:
+                new_item = journal_factory.create_item()
+                catalogue_.add_item(new_item)
         if choice == 6:
-            display_available_books(item_list)'''
+            biblioteca.display_available_books()
 
 
 if __name__ == '__main__':

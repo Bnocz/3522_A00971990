@@ -9,6 +9,14 @@ class Catalogue:
     def __init__(self, item_list):
         self.item_list = item_list
 
+    @staticmethod
+    def increment_copy(item_):
+        item_.num_copies += 1
+
+    @staticmethod
+    def decrement_copy(item_):
+        item_.num_copies -= 1
+
     def find_item(self, title):
         """
         searches through item_list and returns
@@ -16,13 +24,9 @@ class Catalogue:
         :param title:
         :return:
         """
-        for Item in self.item_list:
-            if title == Item.title:
-                print(Item)
-            else:
-                print("Sorry, we couldn't find that item")
+        return [print(Item) for Item in self.item_list if title == Item.title]
 
-    def add_book(self, new_item):
+    def add_item(self, new_item):
         """
         Appends a book to the end of the list,
         replaced by LibraryItemGenerator for
@@ -30,10 +34,8 @@ class Catalogue:
         :param new_item: new Item object
         :return:
         """
-        if new_item in self.item_list:
-            return
-        else:
-            self.item_list.append(new_item)
+        [self.item_list.append(new_item) for item in self.item_list
+         if new_item not in self.item_list]
 
     def remove_item(self, call_number):
         """
@@ -43,14 +45,10 @@ class Catalogue:
         :param call_number: unique identifier for item
         :return:
         """
-        for Item in self.item_list:
-            if call_number == Item.call_number:
-                self.item_list.remove(Item)
-            else:
-                return
+        [self.item_list.remove(Item) for Item in self.item_list]
 
 
-class LibraryItemGenerator:
+'''class LibraryItemGenerator:
     """
     Asks user what kind of Item they would like to create, then
     takes user input for Item attributes, and appends generated
@@ -92,4 +90,4 @@ class LibraryItemGenerator:
             item_.num_copies = 1
             self.item_list.append(item_)
         else:
-            print("Sorry, that's an invalid option")
+            print("Sorry, that's an invalid option")'''
