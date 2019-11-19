@@ -101,8 +101,11 @@ class Crypto:
     def execute_request(self, request: Request):
         pass
 
-class BaseCryptoHandler(abc.ABC):
 
+class BaseCryptoHandler(abc.ABC):
+    """
+    base handler
+    """
     def __init__(self, next_handler):
         self.next_handler = next_handler
 
