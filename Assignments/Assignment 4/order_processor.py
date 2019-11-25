@@ -30,6 +30,12 @@ class Order:
     def __init__(self, row, factory):
         self.row = row
         self.factory = factory
+        self.garment = row["Garment"]
+        self.count = row["Count"]
+        self.style_name = row["Style Name"]
+        self.size = row["Size"]
+        self.Colour = row["Colour"]
+        self.textile = row["Textile"]
 
 
 
