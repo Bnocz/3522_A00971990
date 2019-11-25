@@ -43,11 +43,11 @@ class NikaFactory(BrandFactory):
 
     def create_shirt_men(self):
         return ShirtMenNika(self.order.style, self.order.size, self.order.colour,
-                            self.order.textile, self.order.category)
+                            self.order.textile, self.order.sport)
 
     def create_shirt_women(self):
         return ShirtWomenNika(self.order.style, self.order.size, self.order.colour,
-                              self.order.textile, self.order.category)
+                              self.order.textile, self.order.sport)
 
     def create_socks_unisex(self):
         return SockPairUnisexNika(self.order.style, self.order.size, self.order.colour,
@@ -138,9 +138,9 @@ class ShirtMenNika(ShirtMen):
     Nika brand ShirtMen, have variables for whether it is sports or outdoor clothing
     """
 
-    def __init__(self, style, size, colour, textile, category):
+    def __init__(self, style, size, colour, textile, sport):
         super().__init__(style, size, colour, textile)
-        self.category = category
+        self.category = sport
 
 
 class ShirtWomenLuluLime(ShirtWomen):
@@ -169,9 +169,9 @@ class ShirtWomenNika(ShirtWomen):
     """
     Nika brand ShirtWomen, have variables for whether it is sports or outdoor clothing
     """
-    def __init__(self, style, size, colour, textile, category):
+    def __init__(self, style, size, colour, textile, sport):
         super().__init__(style, size, colour, textile)
-        self.category = category
+        self.category = sport
 
 
 class SockPairUnisexLuluLime(SockPairUnisex):
