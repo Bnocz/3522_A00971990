@@ -3,16 +3,35 @@ import brand_factories
 
 
 class OrderProcessor:
-
+    """
+    Class that processes orders from an excel file using pandas
+    has methods to read, then process row by row.
+    """
     def __init__(self, file_path):
+        """
+        initializes order processor with a file path and
+        current order
+        :param file_path: the path of the excel file
+        """
         self.file_path = "COMP_3522_A4_orders.xlsx"
         self.order = None
 
     def read_order(self):
+        """
+        opens and reads an excel sheet using pandas
+        """
         self.order = pandas.read_excel(self.file_path)
         return self.order
 
     def process_order(self, index_):
+        """
+        locates a row by its integer index, and assigns that row to a variable
+        has if checks for the brand and assigns factory variable to the correct
+        factory. Packages both row and factory into an object of type Order and
+        returns it.
+        :param index_:
+        :return:
+        """
         row_ = self.order.iloc[index_]
         factory = None
         if row_["Brand"] == "Lululime":
@@ -26,6 +45,10 @@ class OrderProcessor:
 
 
 class Order:
+    """
+    contains information about customer orders. Is used in garment_maker
+    to help the factories create the needed order
+    """
 
     def __init__(self, row, factory):
         self.row = row
@@ -36,14 +59,3 @@ class Order:
         self.size = row["Size"]
         self.Colour = row["Colour"]
         self.textile = row["Textile"]
-
-
-
-def main():
-    op = OrderProcessor('COMP_3522_A4_orders.xlsx')
-    ef = op.read_order()
-    op.process_order(0)
-
-
-if __name__ == '__main__':
-    main()
