@@ -16,14 +16,21 @@ class OrderProcessor:
         row_ = self.order.iloc[index_]
         factory = None
         if row_["Brand"] == "Lululime":
-            apple = row_["Garment"]
-            orange = row_["Dry Cleaning"]
-            print(apple)
-            print(orange)
+            factory = brand_factories.LuluLimeFactory()
         if row_.Brand == "PineappleRepublic":
-            print(row_["Brand"])
+            factory = brand_factories.PineAppleRepublicFactory()
         if row_.Brand == "Nika":
-            print(row_["Brand"])
+            factory = brand_factories.NikaFactory()
+
+        return Order(row_, factory)
+
+
+class Order:
+
+    def __init__(self, row, factory):
+        self.row = row
+        self.factory = factory
+
 
 
 def main():
