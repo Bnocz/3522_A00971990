@@ -95,46 +95,57 @@ class Move:
                f"Effect: {self.effect_short}"
 
 
+class Request:
+
+    def __init__(self):
+        self.pokedex_state = None
+        self.input_name = None
+        self.input_file = None
+        self.expanded = None
+        self.output = None
+
+    def __str__(self):
+        return f"Request: State: {self.pokedex_state}, Data: {self.input_name}" \
+               f", {self.input_file} Input file: {self.expanded}, Output: {self.output}, "
+
+
 def setup_request_commandline():
-    """
-    Implements the argparse module to accept arguments via the command
-    line. This function specifies what these arguments are and parses it
-    into an object of type Request. If something goes wrong with
-    provided arguments then the function prints an error message and
-    exits the application.
-    :return: The object of type Request with all the arguments provided
-    in it.
-    """
+
     parser = argparse.ArgumentParser()
-    parser.add_argument("pokemon", "ability", "move",
+    parser.add_argument("mode",
                         help="The mode in which you wish to open the pokedex"
                              "ex. 'pokemon' mode can only search pokemon")
-    parser.add_argument("filename.txt", "name or id",
+    parser.add_argument("name",
                         help="File for bulk queries, name or id "
                              "for single queries")
     parser.add_argument("-e", "--expanded",
                         help="Optional flag to expand certain attributes"
                              "within the pokedex.")
-    parser.add_argument('-o "filename.txt"', '--output "filename.txt',
+    parser.add_argument("-o", "--output",
                         help="Optional flag, if provided, a filename must"
                              "also be provided. Query result will be printed"
                              "to this file"),
-'''    try:
-        args = parser.parse_args()
-        request = Request()
-        request.encryption_state = CryptoMode(args.mode)
-        request.data_input = args.string
-        request.input_file = args.file
-        request.output = args.output
-        request.key = args.key
-        print(request)
-        return request
-    except Exception as e:
-        print(f"Error! Could not read arguments.\n{e}")
-        quit()'''
+    args = parser.parse_args()
+    request = Request()
+    request.mode = args.mode
+    if '.txt' in args.name:
+        request.input_file = args.name
+    else:
+        request.input_name = args.name
+    request.name = args.name
+    request.expanded = args.expanded
+    request.output = args.output
+    print(request)
+    return request
 
+
+def main(Request):
+    pass
 
 if __name__ == '__main__':
-    data = asyncio.run(get_move_data(5))
-    move = Move(data)
-    print(move)
+    data = asyncio.run(get_pokemon_data("charmander"))
+    pokemon = Pokemon(data)
+    print(pokemon)
+    print("-----------------")
+'''    request = setup_request_commandline()
+    main(request)'''
