@@ -5,6 +5,9 @@ import argparse
 import abc
 import enum
 
+from des import DesKey
+
+
 class CryptoMode(enum.Enum):
     """
     Lists the various modes that the Crypto application can run in.
@@ -98,13 +101,16 @@ class Crypto:
     def execute_request(self, request: Request):
         pass
 
-class BaseCryptoHandler(abc.ABC):
 
+class BaseCryptoHandler(abc.ABC):
+    """
+    base handler
+    """
     def __init__(self, next_handler):
         self.next_handler = next_handler
 
     @abc.abstractmethod
-    def handle_crypto(self, cryptString):
+    def handle_request(self, crypt_string, key):
         pass
 
     def set_handler(self, handler):
@@ -116,17 +122,17 @@ class InputHandler(BaseCryptoHandler):
     def __init__(self, next_handler):
         self.next_handler = next_handler
 
-    def handle_crypto(self, cryptString):
-        if isinstance(cryptString, io.IOBase):
+    def handle_request(self, crypt_string, key):
+        if isinstance(crypt_string, io.IOBase):
             with open('data.txt', 'r') as file:
-                cryptString = file.read()
+                crypt_string = file.read()
                 if not self.next_handler:
                     return "", True
-                return self.next_handler.handle_crypto(cryptString)
-        elif isinstance(cryptString, str):
+                return self.next_handler.handle_request(crypt_string, key)
+        elif isinstance(crypt_string, str):
             if not self.next_handler:
                 return "", True
-            return self.next_handler.handle_crypto(cryptString)
+            return self.next_handler.handle_request(crypt_string, key)
         else:
             return "Invalid input", False
 
@@ -135,6 +141,38 @@ class KeyHandler(BaseCryptoHandler):
 
     def __init__(self, next_handler):
         self.next_handler = next_handler
+
+    def handle_request(self, crypt_string, key):
+        key1 = DesKey(b"key")
+        if not self.next_handler:
+            return "", True
+        return self.next_handler.handle_request(crypt_string, key1)
+
+
+class EncryptionHandler(BaseCryptoHandler):
+
+    def __init__(self, next_handler):
+        self.next_handler = next_handler
+
+    def handle_request(self, crypt_string, key):
+        encrypted = key.encrypt(b"crypt_string")
+        if not self.next_handler:
+            return "", True
+        return encrypted
+
+
+class DecryptionHandler(BaseCryptoHandler):
+
+    def __init__(self, next_handler):
+        self.next_handler = next_handler
+
+    def handle_request(self, crypt_string, key):
+        decrypted = key.decrypt(b"crypt_string")
+        if not self.next_handler:
+            return "", True
+        return decrypted
+
+
 def main(request: Request):
     pass
 
