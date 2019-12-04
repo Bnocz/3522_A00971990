@@ -34,17 +34,16 @@ class Pokemon:
         self.id = json["id"]
         self.height = json["height"]
         self.weight = json["weight"]
-        self.stats = json["stats"]
         self.types = json["types"]
         self.abilities = json["abilities"]
-        self.moves = json["moves"]
+        self.moves = [(move['move'], move['version_group_details'][0]['level_learned_at'])
+                      for move in json['moves']]
 
     def __str__(self):
         return f"Name: {self.name}\n" \
                f"ID: {self.id}\n" \
                f"Height: {self.height} decimetres\n" \
                f"Weight: {self.weight} hectograms\n" \
-               f"Stats: {self.stats}\n" \
                f"Types: {self.types}\n" \
                f"Abilities: {self.abilities}\n" \
                f"Moves: {self.moves}\n"
@@ -118,7 +117,7 @@ def setup_request_commandline():
     parser.add_argument("name",
                         help="File for bulk queries, name or id "
                              "for single queries")
-    parser.add_argument("-e", "--expanded",
+    parser.add_argument("-e", "--expanded", action="store_true",
                         help="Optional flag to expand certain attributes"
                              "within the pokedex.")
     parser.add_argument("-o", "--output",
@@ -135,17 +134,27 @@ def setup_request_commandline():
     request.name = args.name
     request.expanded = args.expanded
     request.output = args.output
-    print(request)
     return request
 
 
-def main(Request):
-    pass
+def main(request):
+    if request.mode == 'pokemon':
+        data = asyncio.run(get_pokemon_data(request.name))
+        pokemon = Pokemon(data)
+        print(pokemon)
+    elif request.mode == 'ability':
+        asyncio.run(get_ability_data(request.name))
+        data = asyncio.run(get_ability_data(request.name))
+        ability = Ability(data)
+        print(ability)
+    else:
+        asyncio.run(get_move_data(request.name))
+        data = asyncio.run(get_move_data(request.name))
+        move = Move(data)
+        print(move)
+
 
 if __name__ == '__main__':
-    data = asyncio.run(get_pokemon_data("charmander"))
-    pokemon = Pokemon(data)
-    print(pokemon)
-    print("-----------------")
+    main(setup_request_commandline())
 '''    request = setup_request_commandline()
     main(request)'''
