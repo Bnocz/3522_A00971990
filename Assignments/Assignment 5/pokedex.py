@@ -26,6 +26,10 @@ async def get_ability_data(id: int) -> dict:
         return await response.json()
 
 
+def print_output_to_file(file_path, string):
+    with open(file_path, "w") as file_to_write:
+        file_to_write.write(string)
+
 class Pokemon:
 
     def __init__(self, json):
@@ -36,6 +40,7 @@ class Pokemon:
         self.weight = json["weight"]
         self.types = json["types"]
         self.abilities = json["abilities"]
+        self.abilities_formatted = [f"Ability: {x['ability']['name']} URL: {x['ability']['url']}" for x in self.abilities]
         self.moves = [(move['move'], move['version_group_details'][0]['level_learned_at'])
                       for move in json['moves']]
 
@@ -45,7 +50,7 @@ class Pokemon:
                f"Height: {self.height} decimetres\n" \
                f"Weight: {self.weight} hectograms\n" \
                f"Types: {self.types}\n" \
-               f"Abilities: {self.abilities}\n" \
+               f"Abilities: {self.abilities_formatted}\n" \
                f"Moves: {self.moves}\n"
 
 
@@ -94,6 +99,24 @@ class Move:
                f"Effect: {self.effect_short}"
 
 
+class PokemonExpanded(Pokemon):
+
+    def __init__(self, json):
+        super().__init__(json)
+        self.stats = json['stats']
+        self.formatted_stats = [f"{x['stat']['name']}: {x['base_stat']}" for x in self.stats]
+
+    def __str__(self):
+        return f"Name: {self.name}\n" \
+               f"ID: {self.id}\n" \
+               f"Height: {self.height} decimetres\n" \
+               f"Weight: {self.weight} hectograms\n" \
+               f"Types: {self.types}\n" \
+               f"Stats: {self.formatted_stats}\n" \
+               f"Abilities: {self.abilities_formatted}\n" \
+               f"Moves: {self.moves}\n"
+
+
 class Request:
 
     def __init__(self):
@@ -138,20 +161,51 @@ def setup_request_commandline():
 
 
 def main(request):
-    if request.mode == 'pokemon':
-        data = asyncio.run(get_pokemon_data(request.name))
-        pokemon = Pokemon(data)
-        print(pokemon)
-    elif request.mode == 'ability':
-        asyncio.run(get_ability_data(request.name))
-        data = asyncio.run(get_ability_data(request.name))
-        ability = Ability(data)
-        print(ability)
+    if request.input_file is None:
+        if request.mode == 'pokemon':
+            data = asyncio.run(get_pokemon_data(request.name))
+            pokemon = Pokemon(data)
+            print(pokemon)
+        elif request.mode == 'ability':
+            asyncio.run(get_ability_data(request.name))
+            data = asyncio.run(get_ability_data(request.name))
+            ability = Ability(data)
+            print(ability)
+        else:
+            asyncio.run(get_move_data(request.name))
+            data = asyncio.run(get_move_data(request.name))
+            move = Move(data)
+            print(move)
     else:
-        asyncio.run(get_move_data(request.name))
-        data = asyncio.run(get_move_data(request.name))
-        move = Move(data)
-        print(move)
+        if request.mode == 'pokemon':
+            with open(request.input_file) as query_data:
+                for line in query_data:
+                    line_new = line.replace("\n", "")
+                    data = asyncio.run(get_pokemon_data(line_new))
+                    if request.expanded is True:
+                        pokemon = PokemonExpanded(data)
+                        if request.output is not None:
+                            print_output_to_file(request.output, pokemon.__str__())
+                        else:
+                            print(pokemon)
+                    else:
+                        pokemon = Pokemon(data)
+                        if request.output:
+                            print_output_to_file("output.txt", pokemon.__str__())
+                        else:
+                            print(pokemon)
+        elif request.mode == 'ability':
+            with open(request.input_file) as query_data:
+                for line in query_data:
+                    line_new = line.replace("\n", "")
+                    data = asyncio.run(get_ability_data(line))
+                    ability = Ability(data)
+        else:
+            with open(request.input_file) as query_data:
+                for line in query_data:
+                    line_new = line.replace("\n", "")
+                    asyncio.run(get_move_data(line))
+
 
 
 if __name__ == '__main__':
