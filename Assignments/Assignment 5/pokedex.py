@@ -198,13 +198,22 @@ def main(request):
             with open(request.input_file) as query_data:
                 for line in query_data:
                     line_new = line.replace("\n", "")
-                    data = asyncio.run(get_ability_data(line))
+                    data = asyncio.run(get_ability_data(line_new))
                     ability = Ability(data)
+                    if request.output is not None:
+                        print_output_to_file(request.output, ability.__str__())
+                    else:
+                        print(ability)
         else:
             with open(request.input_file) as query_data:
                 for line in query_data:
                     line_new = line.replace("\n", "")
-                    asyncio.run(get_move_data(line))
+                    data = asyncio.run(get_move_data(line_new))
+                    move = Move(data)
+                    if request.output is not None:
+                        print_output_to_file(request.output, move.__str__())
+                    else:
+                        print(move)
 
 
 
